@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 int main(int argc, char *argv[])
 {
@@ -29,7 +30,12 @@ int main(int argc, char *argv[])
         // Closes the read end of the pipe
         close(pipe_fds[0]);
 
-        // Insert timestamp code here
+        // Record the starting timestamp
+        struct timeval start;
+        gettimeofday(&start, NULL);
+
+        // Send the starting timestamp to the parent
+        write(pipe_fds[1], &start, sizeof(start));
 
         // Closes the write end of the pipe
         close(pipe_fds[1]);
@@ -46,12 +52,19 @@ int main(int argc, char *argv[])
         // Closes unused write end
         close(pipe_fds[1]);
 
-        // Insert child-related code here
+        // Record the ending timestamp
+        struct timeval start, end;
+        gettimeofday(&end, NULL);
+
+        // Read the starting timestamp from the pipe
+        read(pipe_fds[0], &start, sizeof(start));
 
         // Closes the read end
         close(pipe_fds[0]);
 
-        // Insert hand-off code here
+        // Calculate and print the elapsed time
+        double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1000000.0;
+        printf("Elapsed time: %.6f seconds\n", elapsed);
 
         // Can delete this if it runs on Windows
         printf("Parent process: PID = %d, Child PID = %d\n", getpid(), pid);
