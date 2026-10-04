@@ -77,3 +77,50 @@ int main(int argc, char *argv[])
         // Calculate and print elapsed time here using *shm_ptr and end_time.
 
         cleanup_shm(shm_ptr);
+        // Return the command's exit status if it exited normally.
+        return WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+    }
+
+    return 0;
+}
+
+struct timeval *setup_shm()
+{
+    int shm_fd = shm_open("/time_shm", O_CREAT | O_RDWR, 0600);
+
+    if (shm_fd < 0)
+    {
+        perror("shm_open failed");
+        return NULL;
+    }
+
+    if (ftruncate(shm_fd, sizeof(struct timeval)) < 0)
+    {
+        perror("ftruncate failed");
+        close(shm_fd);
+        return NULL;
+    }
+
+    struct timeval *shm_ptr = mmap(
+        NULL, sizeof(struct timeval),
+        PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
+
+    if (shm_ptr == MAP_FAILED)
+    {
+        perror("mmap failed");
+        close(shm_fd);
+        return NULL;
+    }
+
+    close(shm_fd);
+    return shm_ptr;
+}
+
+void cleanup_shm(struct timeval *shm_ptr)
+{
+    if (shm_ptr != NULL)
+    {
+        munmap(shm_ptr, sizeof(struct timeval));
+        shm_unlink("/time_shm");
+    }
+}
