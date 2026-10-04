@@ -29,6 +29,15 @@ int main(int argc, char *argv[])
     {
         // Child process
         printf("Child process: PID = %d\n", getpid());
+
+        // Record the starting timestamp directly in shared memory.
+        if (gettimeofday(shm_ptr, NULL) == -1)
+        {
+            perror("gettimeofday failed");
+            _exit(1);
+        }
+
+        // Command execution with execvp() goes immediately after this.
     }
     else
     {
