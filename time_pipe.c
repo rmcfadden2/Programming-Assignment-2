@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <sys/wait.h>
 
 int main(int argc, char *argv[])
 {
@@ -41,6 +42,9 @@ int main(int argc, char *argv[])
         close(pipe_fds[1]);
 
         // Insert terminal code execution here
+        execvp(argv[1], &argv[1]);
+        perror("execvp failed");
+        exit(1);
 
         // Can delete this if it runs on Windows
         printf("Child process: PID = %d\n", getpid());
@@ -53,6 +57,7 @@ int main(int argc, char *argv[])
         close(pipe_fds[1]);
 
         // Record the ending timestamp
+        wait(NULL);
         struct timeval start, end;
         gettimeofday(&end, NULL);
 

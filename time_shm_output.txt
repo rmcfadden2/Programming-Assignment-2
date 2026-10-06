@@ -1,0 +1,10 @@
+total 344
+-rw-r--r--  1 donaldbumiller  staff     26 Sep 30 21:42 README.md
+-rwxr-xr-x  1 donaldbumiller  staff  49936 Sep 30 22:14 pipe_test
+-rwxr-xr-x  1 donaldbumiller  staff  50048 Oct  5 21:45 time_pipe
+-rw-r--r--  1 donaldbumiller  staff   1928 Oct  5 21:44 time_pipe.c
+-rw-r--r--  1 donaldbumiller  staff    563 Oct  5 21:45 time_pipe_output.txt
+-rwxr-xr-x  1 donaldbumiller  staff  50224 Oct  5 21:44 time_shm
+-rw-r--r--  1 donaldbumiller  staff   2538 Oct  5 21:44 time_shm.c
+-rw-r--r--  1 donaldbumiller  staff      0 Oct  5 21:45 time_shm_output.txt
+Elapsed time: 0.012977 seconds
